@@ -47,38 +47,115 @@ myStack.until(7)
 What's the time complexity?
 
 
-
  */
 
 function Stack(capacity) {
-  // implement me...
+  this.storage = {};
+  this.count = 0;
+  this.maxSize = capacity;
 }
 
 Stack.prototype.push = function(value) {
-  // implement me...
+  this.count++;
+
+  if (this.count > this.maxSize) {
+    this.count--;
+    return "Max capacity already reached. Remove element before adding a new one.";
+  }
+  this.storage[this.count] = value;
+
+  return this.count;
 };
-// Time complexity:
+// Time complexity: constant
 
 Stack.prototype.pop = function() {
-  // implement me...
+  var mostRecent = this.storage[this.count];
+  delete this.storage[this.count];
+
+  return mostRecent;
 };
-// Time complexity:
+// Time complexity: linear or constant?
 
 Stack.prototype.peek = function() {
-  // implement me...
+  return this.storage[this.count];
 };
-// Time complexity:
+// Time complexity: constant
 
 Stack.prototype.count = function() {
-  // implement me...
+  return this.count;
 };
-// Time complexity:
+// Time complexity: constant
 
+Stack.prototype.contains = function(query) {
+  for (var key in this.storage) {
+    if (this.storage[key] === query) {
+      return true;
+    }
+  }
+  return false;
+}
+// Time complexity: linear
+
+Stack.prototype.until = function(value) {
+  for (var key in this.storage) {
+    if (this.storage[key] === value) {
+      return this.count - key;
+    }
+  }
+}
+// Time complexity: constant
 
 /*
 *** Exercises:
 
 1. Implement a stack with a min method which returns the minimum element currently in the stack. This method should have O(1) time complexity. Make sure your implementation handles duplicates.
+*/
+function Stack(capacity) {
+  this.storage = {};
+  this.count = 0;
+  this.smallest = 0;
+  this.maxSize = capacity;
+}
+
+Stack.prototype.push = function(value) {
+  this.count++;
+  if (value < this.smallest) {
+    this.smallest = value;
+  }
+
+  if (this.count > this.maxSize) {
+    this.count--;
+    return "Max capacity already reached. Remove element before adding a new one.";
+  }
+  this.storage[this.count] = value;
+
+  return this.count;
+};
+// Time complexity: constant
+
+Stack.prototype.pop = function() {
+  var base = this.storage[0];
+  var mostRecent = this.storage[this.count];
+  delete this.storage[this.count];
+
+
+  if (this.smallest === mostRecent) {
+    for (var key in this.storage) {
+      if (this.storage[key] <= base) {
+        this.smallest = this.storage[key];
+      }
+    }
+  }
+
+  return mostRecent;
+};
+// Time complexity: linear
+
+Stack.prototype.min = function() {
+  return this.min;
+}
+// Time complexity: constant
+/*
 
 2. Sort a stack so that its elements are in ascending order.
 
